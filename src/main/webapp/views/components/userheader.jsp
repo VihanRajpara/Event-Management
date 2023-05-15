@@ -121,12 +121,24 @@ if (session_email == null) {
 	<nav>
 		<ul class="menuItems">
 			<li><a href='${pageContext.request.contextPath}/faculty/dashboard'>HOME</a></li>
-			<li><a href='${pageContext.request.contextPath}/faculty/addfac'>ADD
-					Faculty</a></li>
+			<li><a href='${pageContext.request.contextPath}/faculty/approvalstudent'>Add Student</a></li>
+			<li><a href='${pageContext.request.contextPath}/faculty/allstudent'>All Student</a></li>
 		</ul>
 
 	</nav>
 	<a class="button" href='${pageContext.request.contextPath}/faculty/logout'>LOGOUT</a>
+</section>
+<%
+} else if(session_type.equals("student")) {
+%>
+<section class="body">
+	<nav>
+		<ul class="menuItems">
+			<li><a href='${pageContext.request.contextPath}/student/dashboard'>HOME</a></li>
+		</ul>
+
+	</nav>
+	<a class="button" href='${pageContext.request.contextPath}/student/logout'>LOGOUT</a>
 </section>
 <%
 }

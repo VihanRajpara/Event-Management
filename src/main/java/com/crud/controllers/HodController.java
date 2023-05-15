@@ -25,7 +25,7 @@ import java.security.Principal;
 @Controller
 public class HodController {
 	HodController() {
-		System.out.println("------------------HODController-------------------------");
+		System.out.println("--------------------------------HOD Controller--------------------------------");
 	}
 
 	@RequestMapping(value = "/hod/dashboard")
@@ -52,7 +52,7 @@ public class HodController {
 			} else {
 				res.sendRedirect("login");
 			}
-		}
+		}else {res.sendRedirect("login");}
 	}
 
 	@RequestMapping(value = "/hod/logout")

@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 public class WelcomeController {
 	public WelcomeController() {
-		System.out.println("--------------------Welcome Controller----------------------------------");
+		System.out.println("------------------------------Welcome Controller------------------------------");
 	}
 
 	@RequestMapping(value = "/login")

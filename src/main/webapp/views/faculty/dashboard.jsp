@@ -16,7 +16,7 @@ body {
 	font-family: 'Open Sans', sans-serif;
 }
 
-.button {
+.buttons {
 	background-color: #4169E1;
 	border: none;
 	border-radius: 6px;
@@ -30,8 +30,8 @@ body {
 	cursor: pointer;
 }
 
-section {
-margin:0px;
+.section {
+	margin: 0px;
 	width: 100%;
 	text-align: right;
 	background: #dcdcdc;
@@ -41,8 +41,8 @@ margin:0px;
 <body>
 	<%
 	if (session_verify.equals("Under Approval")) {
-	%><section>
-		<a class="button"
+	%><section class="section">
+		<a class="buttons"
 			href='${pageContext.request.contextPath}/faculty/logout'>LOGOUT</a>
 	</section>
 	<br>

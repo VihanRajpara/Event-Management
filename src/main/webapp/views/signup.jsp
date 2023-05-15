@@ -139,22 +139,45 @@ form fieldset input[type="submit"]:hover {
 			</h1>
 			<fieldset>
 				<div id="student-fields" style="display: block;">
+				<p>
+					<select name="hod" id="hod" style="text-transform: uppercase;">
+						<option style="text-transform: capitalize;" value="" selected>Select
+							Your Hod</option>
+						<jstlc:forEach var="hod" items="${hod_list}">
+							<option value="${hod.id}">${hod.id}-${hod.name}</option>
+						</jstlc:forEach>
+					</select>
+				</p>
 					<p>
-						 <select name="dep" id="dep"
-							style="text-transform: uppercase;"dep"><option style="text-transform: uppercase;" value="" selected>Select Your Department</option>
+						<select name="dep" id="dep" style="text-transform: uppercase;"dep"><option
+								style="text-transform: uppercase;" value="" selected>Select
+								Your Department</option>
 							<jstlc:forEach var="dep" items="${dep_list}">
 								<option style="text-transform: uppercase;" value="${dep.name}">${dep.name}</option>
 							</jstlc:forEach>
 						</select>
-					<div>
-						 <select name="faculty" id="faculty">
-						<option style="text-transform: uppercase;" value="" selected>Select Your Faculty</option>
-							<jstlc:forEach var="faculty" items="${fac_list}">
-								<option style="text-transform: capitalize;"
-									value="${faculty.id}">${faculty.dep} - ${faculty.name}</option>
-							</jstlc:forEach>
-						</select>
-					</div>
+					</p>
+
+					<p><select name="faculty" id="faculty">
+						<option style="text-transform: uppercase;" value="" selected>Select
+							Your Faculty</option>
+						<jstlc:forEach var="faculty" items="${fac_list}">
+							<option style="text-transform: capitalize;" value="${faculty.id}">${faculty.dep}
+								- ${faculty.name}</option>
+						</jstlc:forEach>
+					</select>
+					</p>
+					<p><select name="sem" id="sem">
+						<option style="text-transform: uppercase;" value="" selected>Select Your Sem</option>
+						<option style="text-transform: uppercase;" value="1" >1</option>
+						<option style="text-transform: uppercase;" value="2" >2</option>
+						<option style="text-transform: uppercase;" value="3" >3</option>
+						<option style="text-transform: uppercase;" value="4" >4</option>
+						<option style="text-transform: uppercase;" value="5" >5</option>
+						<option style="text-transform: uppercase;" value="6" >6</option>
+						<option style="text-transform: uppercase;" value="7" >7</option>
+						<option style="text-transform: uppercase;" value="8" >8</option>
+					</select>
 					</p>
 					<p>
 						<input type="text" name="name" id="name"
@@ -172,22 +195,22 @@ form fieldset input[type="submit"]:hover {
 						<input type="password" name="password" id="password"
 							placeholder="Student Password">
 					</p>
-
+	<p>
+				<input type="submit" value="Sign Up">
+			</p>
 				</div>
 		</form>
 
 		<form action="faculty/signupaction" method="post">
 			<div id="faculty-fields" style="display: none;">
 				<p>
-				<div>
 					<select name="hod" id="hod" style="text-transform: uppercase;">
 						<option style="text-transform: capitalize;" value="" selected>Select
 							Your Hod</option>
 						<jstlc:forEach var="hod" items="${hod_list}">
-							<option value="${hod.id}">${hod.id}- ${hod.name}</option>
+							<option value="${hod.id}">${hod.id}-${hod.name}</option>
 						</jstlc:forEach>
 					</select>
-				</div>
 				</p>
 				<p>
 					<input type="text" name="name" id="name" placeholder="Faculty Name">
@@ -204,13 +227,11 @@ form fieldset input[type="submit"]:hover {
 					<input type="password" name="password" id="password"
 						placeholder="Faculty Password">
 				</p>
-			</div>
-
-
-
-			<p>
+				<p>
 				<input type="submit" value="Sign Up">
 			</p>
+			</div>
+			
 			</fieldset>
 		</form>
 	</div>

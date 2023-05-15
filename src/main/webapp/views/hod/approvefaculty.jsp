@@ -18,9 +18,6 @@
 body {
 	font-family: 'Open Sans', sans-serif;
 }
-.center{
-	
-}
 </style>
 <body>
 	<%

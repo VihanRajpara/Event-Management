@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AdminController {
 
 	AdminController() {
-		System.out.println("------------------AdminController-------------------------");
+		System.out.println("-------------------------------Admin Controller-------------------------------");
 	}
 
 	@RequestMapping(value = "/admin/dashboard")
