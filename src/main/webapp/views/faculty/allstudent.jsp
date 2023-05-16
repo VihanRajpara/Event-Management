@@ -56,29 +56,32 @@ body {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#semDropdown').change(function() {
-            var selectedSem = $(this).val();
-            updateStudentList(selectedSem);
-        });
-    });
+$(document).ready(function() {
+	$('#semDropdown, #searchInput').change(function() {
+		var selectedSem = $('#semDropdown').val();
+		var searchQuery = $('#searchInput').val();
+		updateStudentList(searchQuery, selectedSem);
+	});
+});
 
-    function updateStudentList(selectedSem) {
-        $.ajax({
-            url: "${pageContext.request.contextPath}/faculty/newallstudent",
-            type: "GET",
-            data: {
-                sem: selectedSem
-            },
-            success: function(response) {
-            	$('#student-list-table').html(response);
-                console.log(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    }
+
+	function updateStudentList(searchQuery,selectedSem) {
+		$.ajax({
+			url : "${pageContext.request.contextPath}/faculty/newallstudent",
+			type : "GET",
+			data : {
+				sem : selectedSem,
+				search : searchQuery
+			},
+			success : function(response) {
+				$('#student-list-table').html(response);
+				console.log(response);
+			},
+			error : function(xhr, status, error) {
+				console.error(xhr.responseText);
+			}
+		});
+	}
 </script>
 
 
@@ -100,21 +103,12 @@ body {
 	<jsp:include page="../components/userheader.jsp" />
 	<br>
 	<br>
-	<select id="semDropdown">
-		<option value="">All</option>
-		<jstlc:forEach var="i" begin="1" end="8">
-			<option value="${i}">${i}</option>
-		</jstlc:forEach>
-	</select>
-	<br>
-	<br>
 	<center>
 		<strong><h2>CR Student</h2></strong>
 	</center>
 	<br>
 	<div class="container">
-		<table class="center table table-striped" 
-			style="text-align: center;">
+		<table class="center table table-striped" style="text-align: center;">
 			<thead class="thead-dark">
 				<th>ID</th>
 				<th>NAME</th>
@@ -146,25 +140,32 @@ body {
 		</table>
 		<br> <br>
 		<center>
-			<strong><h2>All Student</h2></strong>
-		</center>
-		<br>
-		<div class="container">
-			
-			<table class="center table table-striped" id="student-list-table"
-				style="text-align: center;">
-				<thead class="thead-dark">
-					<th>ID</th>
-					<th>NAME</th>
-					<th>EMAIL</th>
-					<th>DEP</th>
-					<th>SEM</th>
-					<th>TYPE</th>
-					<th>STATUS</th>
-					<th>ACTION</th>
-				</thead>
-				<jstlc:forEach var="student" items="${student_list}">
-					
+			<strong><h2>All Student</h2></strong> <br>Select Sem <select
+				id="semDropdown">
+				<option value="">All</option>
+				<jstlc:forEach var="i" begin="1" end="8">
+					<option value="${i}">${i}</option>
+				</jstlc:forEach>
+			</select><span> </span> Enter Name You want Search : <input type="text"
+				id="searchInput" placeholder="Search by name"> <br>
+			<br>
+			<br>
+			<div class="container">
+
+				<table class="center table table-striped" id="student-list-table"
+					style="text-align: center;">
+					<thead class="thead-dark">
+						<th>ID</th>
+						<th>NAME</th>
+						<th>EMAIL</th>
+						<th>DEP</th>
+						<th>SEM</th>
+						<th>TYPE</th>
+						<th>STATUS</th>
+						<th>ACTION</th>
+					</thead>
+					<jstlc:forEach var="student" items="${student_list}">
+
 						<tr style="text-transform: uppercase;">
 							<td>${student.id}</td>
 							<td>${student.name}</td>
@@ -181,19 +182,19 @@ body {
 								onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">Make
 									CR</a></td>
 						</tr>
-					
-				</jstlc:forEach>
-			</table>
-		</div>
-		<%
-		}
-		%>
-		<%
-		if (session_email == null) {
-			String redirectURL = "/CollageEvent/login";
-			response.sendRedirect(redirectURL);
-		}
-		%>
-	
+
+					</jstlc:forEach>
+				</table>
+			</div>
+			<%
+			}
+			%>
+			<%
+			if (session_email == null) {
+				String redirectURL = "/CollageEvent/login";
+				response.sendRedirect(redirectURL);
+			}
+			%>
+		
 </body>
 </html>

@@ -187,11 +187,12 @@ public class FacultyController {
 		res.sendRedirect("allstudent");
 	}
 
-	
+	//------------------------------------------------------AJAX--------------------------------------------------------------------------------
 	
 	@RequestMapping(value = "/faculty/newallstudent", method = RequestMethod.GET)
 	public String  NewAllStudent(Model m, HttpServletRequest req, HttpServletResponse res,
-			@RequestParam(value = "sem", required = false) Integer sem) throws IOException {
+			@RequestParam(value = "sem", required = false) Integer sem,
+			@RequestParam(value = "search", required = false) String searchQuery) throws IOException {
 		String email = (String) req.getSession().getAttribute("email");
 		System.out.println("     ============    " + sem);
 		Session session = null;
@@ -200,7 +201,22 @@ public class FacultyController {
 		query.setParameter("email", email);
 		faculty fac_obj = (faculty) query.getSingleResult();
 		List students;
-		if(sem != null) {
+		if(sem != null && searchQuery != null && !searchQuery.isEmpty()) {
+			Query query2 = session.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify AND sem = :sem AND name LIKE :search");
+	        query2.setParameter("search", "%" + searchQuery + "%");
+	        query2.setParameter("facid", fac_obj.getId());
+	        query2.setParameter("sem", sem);
+			query2.setParameter("verify", "Approve");
+	        students = query2.list();
+		}
+		else if (searchQuery != null && !searchQuery.isEmpty()) {
+			Query query2 = session.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify AND name LIKE :search");
+	        query2.setParameter("search", "%" + searchQuery + "%");
+	        query2.setParameter("facid", fac_obj.getId());
+			query2.setParameter("verify", "Approve");
+	        students = query2.list();
+	    }
+		else if(sem != null) {
 			Query query1 = session.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify AND sem = :sem");
 			query1.setParameter("facid", fac_obj.getId());
 			query1.setParameter("verify", "Approve");
