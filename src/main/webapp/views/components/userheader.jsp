@@ -65,10 +65,16 @@ nav p {
 	transition: all 0.5s ease-in-out;
 	color: #4169E1;
 }
+
+.menuItems li a.active {
+	color: #4169E1;
+	font-weight: bold;
+}
 </style>
 <%
 String session_email = (String) session.getAttribute("email");
 String session_type = (String) session.getAttribute("type");
+String urlPath = request.getRequestURI().substring(request.getContextPath().length());
 %>
 <%
 if (session_email == null) {
@@ -76,10 +82,14 @@ if (session_email == null) {
 <section class="body">
 	<nav>
 		<ul class="menuItems">
-			<li><a href='${pageContext.request.contextPath}/'>Home</a></li>
-			<li><a href='${pageContext.request.contextPath}/login'>LOGIN</a></li>
-			<li><a href='${pageContext.request.contextPath}/signup'>SIGN
-					UP</a></li>
+			<li><a href='${pageContext.request.contextPath}/'
+				<% if (urlPath.equals("/")) { %> class="active" <% } %>>Home</a></li>
+			<li><a href='${pageContext.request.contextPath}/login'
+				<% if (urlPath.equals("/views/login.jsp")) { %> class="active"
+				<% } %>>LOGIN</a></li>
+			<li><a href='${pageContext.request.contextPath}/signup'
+				<% if (urlPath.equals("/views/signup.jsp")) { %> class="active"
+				<% } %>>SIGN UP</a></li>
 		</ul>
 	</nav>
 </section>
@@ -89,11 +99,15 @@ if (session_email == null) {
 <section class="body">
 	<nav>
 		<ul class="menuItems">
-			<li><a href='${pageContext.request.contextPath}/admin/dashboard'>HOME</a></li>
-			<li><a href='${pageContext.request.contextPath}/admin/addhod'>ADD
-					HOD</a></li>
-					<li><a href='${pageContext.request.contextPath}/admin/adddep'>ADD
-					DEP</a></li>
+			<li><a href='${pageContext.request.contextPath}/admin/dashboard'
+				<% if (urlPath.equals("/views/admin/dashboard.jsp")) { %>
+				class="active" <% } %>>HOME</a></li>
+			<li><a href='${pageContext.request.contextPath}/admin/addhod'
+				<% if (urlPath.equals("/views/admin/addhod.jsp")) { %>
+				class="active" <% } %>>ADD HOD</a></li>
+			<li><a href='${pageContext.request.contextPath}/admin/adddep'
+				<% if (urlPath.equals("/views/admin/adddep.jsp")) { %>
+				class="active" <% } %>>ADD DEP</a></li>
 		</ul>
 
 	</nav>
@@ -106,39 +120,55 @@ if (session_email == null) {
 <section class="body">
 	<nav>
 		<ul class="menuItems">
-			<li><a href='${pageContext.request.contextPath}/hod/dashboard'>HOME</a></li>
-			<li><a href='${pageContext.request.contextPath}/hod/approvalfaculty'>
-					Faculty</a></li>
+			<li><a href='${pageContext.request.contextPath}/hod/dashboard'
+				<% if (urlPath.equals("/views/hod/dashboard.jsp")) { %>
+				class="active" <% } %>>HOME</a></li>
+			<li><a
+				href='${pageContext.request.contextPath}/hod/approvalfaculty'
+				<% if (urlPath.equals("/views/hod/approvefaculty.jsp")) { %>
+				class="active" <% } %>> Faculty</a></li>
 		</ul>
 
 	</nav>
 	<a class="button" href='${pageContext.request.contextPath}/hod/logout'>LOGOUT</a>
 </section>
 <%
-} else if(session_type.equals("faculty")) {
+} else if (session_type.equals("faculty")) {
 %>
 <section class="body">
 	<nav>
 		<ul class="menuItems">
-			<li><a href='${pageContext.request.contextPath}/faculty/dashboard'>HOME</a></li>
-			<li><a href='${pageContext.request.contextPath}/faculty/approvalstudent'>Add Student</a></li>
-			<li><a href='${pageContext.request.contextPath}/faculty/allstudent'>All Student</a></li>
+			<li><a
+				href='${pageContext.request.contextPath}/faculty/dashboard'
+				<% if (urlPath.equals("/views/faculty/dashboard.jsp")) { %>
+				class="active" <% } %>>HOME</a></li>
+			<li><a
+				href='${pageContext.request.contextPath}/faculty/approvalstudent'
+				<% if (urlPath.equals("/views/faculty/approvestudent.jsp")) { %>
+				class="active" <% } %>>Add Student</a></li>
+			<li><a
+				href='${pageContext.request.contextPath}/faculty/allstudent'
+				<% if (urlPath.equals("/views/faculty/allstudent.jsp")) { %>
+				class="active" <% } %>>All Student</a></li>
 		</ul>
 
 	</nav>
-	<a class="button" href='${pageContext.request.contextPath}/faculty/logout'>LOGOUT</a>
+	<a class="button"
+		href='${pageContext.request.contextPath}/faculty/logout'>LOGOUT</a>
 </section>
 <%
-} else if(session_type.equals("student")) {
+} else if (session_type.equals("student")) {
 %>
 <section class="body">
 	<nav>
 		<ul class="menuItems">
-			<li><a href='${pageContext.request.contextPath}/student/dashboard'>HOME</a></li>
+			<li><a
+				href='${pageContext.request.contextPath}/student/dashboard' <% if (urlPath.equals("/views/student/dashboard.jsp")) { %>class="active"<% } %>>HOME</a></li>
 		</ul>
 
 	</nav>
-	<a class="button" href='${pageContext.request.contextPath}/student/logout'>LOGOUT</a>
+	<a class="button"
+		href='${pageContext.request.contextPath}/student/logout'>LOGOUT</a>
 </section>
 <%
 }
