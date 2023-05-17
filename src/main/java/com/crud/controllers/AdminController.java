@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.crud.dao.dep;
+import com.crud.dao.faculty;
 import com.crud.dao.hod;
+import com.crud.dao.student;
 import com.crud.databse.DBConnection;
 import com.crud.hibernet.*;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -70,7 +74,7 @@ public class AdminController {
 		m.addAttribute("dep_list", (Object) deps);
 		return "/views/admin/addhod.jsp";
 	}
-	
+
 	@RequestMapping(value = "/admin/adddep")
 	public String Adddep(Model m, HttpServletRequest req, HttpServletResponse res) {
 		Session session = null;
@@ -85,11 +89,11 @@ public class AdminController {
 	@RequestMapping(value = "/admin/addhodaction", method = RequestMethod.POST)
 	public void Addhodaction(HttpServletRequest req, HttpServletResponse res, @ModelAttribute("hod") hod hod)
 			throws IOException, SQLException {
-			Session session = HibernetConnection.getSessionFactory().openSession();
-			Transaction t = session.beginTransaction();
-			session.save(hod);
-			t.commit();
-			session.close();
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Transaction t = session.beginTransaction();
+		session.save(hod);
+		t.commit();
+		session.close();
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/admin/addhod");
 	}
@@ -116,7 +120,6 @@ public class AdminController {
 	@RequestMapping(value = "/admin/addhod/edit")
 	public String Addhodedit(Model m, HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
 			throws IOException {
-//		Session session = null;
 		Session session = HibernetConnection.getSessionFactory().openSession();
 		Query query2 = session.createQuery("FROM hod WHERE id = :id");
 		query2.setParameter("id", (Object) id);
@@ -125,7 +128,7 @@ public class AdminController {
 		m.addAttribute("hod", (Object) hod_obj);
 		return "/views/admin/edithod.jsp";
 	}
-	
+
 	@RequestMapping(value = "/admin/adddep/edit")
 	public String Adddepedit(Model m, HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
 			throws IOException {
@@ -143,41 +146,42 @@ public class AdminController {
 	public void Edithodaction(HttpServletRequest req, HttpServletResponse res, @ModelAttribute("hod") hod hod)
 			throws IOException, SQLException {
 		Session session = HibernetConnection.getSessionFactory().openSession();
-			Transaction t = session.beginTransaction();
-			session.saveOrUpdate((Object) hod);
-			t.commit();
-			session.close();
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) hod);
+		t.commit();
+		session.close();
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/admin/addhod");
 	}
-	
+
 	@RequestMapping(value = "/admin/editdepaction", method = RequestMethod.POST)
 	public void Editdepaction(HttpServletRequest req, HttpServletResponse res, @ModelAttribute("dep") dep dep)
 			throws IOException, SQLException {
-			Session session = null;
-			session = HibernetConnection.getSessionFactory().openSession();
-			Transaction t = session.beginTransaction();
-			session.saveOrUpdate((Object) dep);
-			t.commit();
-			session.close();
-		
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) dep);
+		t.commit();
+		session.close();
+
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/admin/adddep");
 	}
+
 	@RequestMapping(value = "/admin/adddepaction", method = RequestMethod.POST)
 	public void Adddepaction(HttpServletRequest req, HttpServletResponse res, @ModelAttribute("dep") dep dep)
 			throws IOException, SQLException {
-			Session session = null;
-			session = HibernetConnection.getSessionFactory().openSession();
-			Transaction t = session.beginTransaction();
-			session.save((Object) dep);
-			t.commit();
-			session.close();
-		
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		Transaction t = session.beginTransaction();
+		session.save((Object) dep);
+		t.commit();
+		session.close();
+
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/admin/adddep");
 	}
-	
+
 	@RequestMapping(value = "/admin/adddep/delete")
 	public void Adddepdelete(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
 			throws IOException {
@@ -193,4 +197,158 @@ public class AdminController {
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/admin/adddep");
 	}
+
+	@RequestMapping(value = "/admin/student", method = RequestMethod.GET)
+	public ModelAndView AllStudent(Model m, HttpServletRequest req, HttpServletResponse res,
+			@RequestParam(value = "sem", required = false) Integer sem) throws IOException {
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		List students;
+		Query query1 = session.createQuery("FROM student WHERE verify = :verify");
+		query1.setParameter("verify", "Approve");
+		students = query1.list();
+		Query query3 = session.createQuery("FROM student WHERE verify = :verify");
+		query3.setParameter("verify", "Under Approval");
+		List newstudents = query3.list();
+		Query query2 = session.createQuery("FROM student WHERE verify = :verify AND type = :type");
+		query2.setParameter("verify", "Approve");
+		query2.setParameter("type", "CR");
+		List crs = query2.list();
+		session.close();
+		ModelAndView mav = new ModelAndView("/views/admin/allstudent.jsp");
+		mav.addObject("student_list", (Object) students);
+		mav.addObject("student_cr", (Object) crs);
+		mav.addObject("student_new", (Object) newstudents);
+		return mav;
+	}
+
+	@RequestMapping(value = "/admin/faculty", method = RequestMethod.GET)
+	public ModelAndView AllFaculty(Model m, HttpServletRequest req, HttpServletResponse res) throws IOException {
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		Query query1 = session.createQuery("FROM faculty WHERE verify = :verify");
+		query1.setParameter("verify", "Approve");
+		List faculties = query1.list();
+		query1.setParameter("verify", "Under Approval");
+		List newfaculties = query1.list();
+		session.close();
+		ModelAndView mav = new ModelAndView("/views/admin/allfaculty.jsp");
+		mav.addObject("faculty_list", (Object) faculties);
+		mav.addObject("faculty_new", (Object) newfaculties);
+		return mav;
+	}
+
+	@RequestMapping(value = "/admin/studentcr")
+	public void Studentcr(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM student WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		student stu_obj = (student) query2.getSingleResult();
+		if (stu_obj.getType().equals("Normal")) {
+			stu_obj.setType("CR");
+		} else {
+			stu_obj.setType("Normal");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) stu_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("student");
+	}
+
+	@RequestMapping(value = "/admin/studentaccess")
+	public void Studentaccess(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM student WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		student stu_obj = (student) query2.getSingleResult();
+		if (stu_obj.getVerify().equals("Under Approval")) {
+			stu_obj.setVerify("Approve");
+		} else {
+			stu_obj.setVerify("Under Approval");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) stu_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("student");
+	}
+	
+	@RequestMapping(value = "/admin/facultyaccess")
+	public void Addhodedit(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM faculty WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		faculty fac_obj = (faculty) query2.getSingleResult();
+		if (fac_obj.getVerify().equals("Under Approval")) {
+			fac_obj.setVerify("Approve");
+		} else {
+			fac_obj.setVerify("Under Approval");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) fac_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("faculty");
+	}
+
+	// ------------------------------------------------------AJAX--------------------------------------------------------------------------------
+
+	@RequestMapping(value = "/admin/newallstudent", method = RequestMethod.GET)
+	public String NewAllStudent(Model m, HttpServletRequest req, HttpServletResponse res,
+			@RequestParam(value = "sem", required = false) Integer sem,
+			@RequestParam(value = "search", required = false) String searchQuery) throws IOException {
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		List students;
+		if (sem != null && searchQuery != null && !searchQuery.isEmpty()) {
+			Query query2 = session
+					.createQuery("FROM student WHERE verify = :verify AND sem = :sem AND name LIKE :search");
+			query2.setParameter("search", "%" + searchQuery + "%");
+			query2.setParameter("sem", sem);
+			query2.setParameter("verify", "Approve");
+			students = query2.list();
+		} else if (searchQuery != null && !searchQuery.isEmpty()) {
+			Query query2 = session.createQuery("FROM student WHERE verify = :verify AND name LIKE :search");
+			query2.setParameter("search", "%" + searchQuery + "%");
+			query2.setParameter("verify", "Approve");
+			students = query2.list();
+		} else if (sem != null) {
+			Query query1 = session.createQuery("FROM student WHERE verify = :verify AND sem = :sem");
+			query1.setParameter("verify", "Approve");
+			query1.setParameter("sem", sem);
+			students = query1.list();
+		} else {
+			Query query1 = session.createQuery("FROM student WHERE verify = :verify");
+			query1.setParameter("verify", "Approve");
+			students = query1.list();
+		}
+		m.addAttribute("student_list", students);
+		return "/views/admin/ajax/studenttable.jsp";
+	}
+	
+	@RequestMapping(value = "/admin/newallfaculty", method = RequestMethod.GET)
+	public String NewAllFaculty(Model m, HttpServletRequest req, HttpServletResponse res,
+			@RequestParam(value = "search", required = false) String searchQuery) throws IOException {
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		List students;
+		if (searchQuery != null && !searchQuery.isEmpty()) {
+			Query query2 = session
+					.createQuery("FROM faculty WHERE verify = :verify AND name LIKE :search");
+			query2.setParameter("search", "%" + searchQuery + "%");
+			query2.setParameter("verify", "Approve");
+			students = query2.list();
+		} else {
+			Query query1 = session.createQuery("FROM faculty WHERE verify = :verify");
+			query1.setParameter("verify", "Approve");
+			students = query1.list();
+		}
+		m.addAttribute("faculty_list", students);
+		return "/views/admin/ajax/facultytable.jsp";
+	}
+
 }

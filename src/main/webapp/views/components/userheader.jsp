@@ -108,6 +108,12 @@ if (session_email == null) {
 			<li><a href='${pageContext.request.contextPath}/admin/adddep'
 				<% if (urlPath.equals("/views/admin/adddep.jsp")) { %>
 				class="active" <% } %>>ADD DEP</a></li>
+			<li><a href='${pageContext.request.contextPath}/admin/faculty'
+				<% if (urlPath.equals("/views/admin/allfaculty.jsp")) { %>
+				class="active" <% } %>>FAculty</a></li>
+			<li><a href='${pageContext.request.contextPath}/admin/student'
+				<% if (urlPath.equals("/views/admin/allstudent.jsp")) { %>
+				class="active" <% } %>>Student</a></li>
 		</ul>
 
 	</nav>
@@ -127,9 +133,10 @@ if (session_email == null) {
 				href='${pageContext.request.contextPath}/hod/approvalfaculty'
 				<% if (urlPath.equals("/views/hod/approvefaculty.jsp")) { %>
 				class="active" <% } %>> Faculty</a></li>
-			<li><a href='${pageContext.request.contextPath}/hod/approvestudent'
-				<% if (urlPath.equals("/views/hod/approvestudent.jsp")) { %>
-				class="active" <% } %>> New Student</a></li>
+			<li><a
+				href='${pageContext.request.contextPath}/hod/approvestudent'
+				<% if (urlPath.equals("/views/hod/approvalstudent.jsp")) { %>
+				class="active" <% } %>>New Student</a></li>
 			<li><a href='${pageContext.request.contextPath}/hod/allstudent'
 				<% if (urlPath.equals("/views/hod/allstudent.jsp")) { %>
 				class="active" <% } %>> Student</a></li>
