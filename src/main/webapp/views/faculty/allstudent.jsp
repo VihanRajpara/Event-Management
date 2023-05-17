@@ -104,7 +104,7 @@ $(document).ready(function() {
 	<br>
 	<br>
 	<center>
-		<strong><h2>CR Student</h2></strong>
+		<h2><strong>CR Student</strong></h2>
 	</center>
 	<br>
 	<div class="container">
@@ -140,7 +140,7 @@ $(document).ready(function() {
 		</table>
 		<br> <br>
 		<center>
-			<strong><h2>All Student</h2></strong> <br>Select Sem <select
+			<h2><strong>All Student</strong></h2><br>Select Sem <select
 				id="semDropdown">
 				<option value="">All</option>
 				<jstlc:forEach var="i" begin="1" end="8">
