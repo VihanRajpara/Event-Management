@@ -44,54 +44,6 @@ public class FacultyController {
 		return "/views/faculty/dashboard.jsp";
 	}
 
-	@RequestMapping(value = "/faculty/approvalstudent", method = RequestMethod.GET)
-	public String Approvalpage(Model m, HttpServletRequest req, HttpServletResponse res) throws IOException {
-		String email = (String) req.getSession().getAttribute("email");
-		Session session = null;
-		session = HibernetConnection.getSessionFactory().openSession();
-		Query query = session.createQuery("FROM faculty WHERE email = :email");
-		query.setParameter("email", email);
-		faculty fac_obj = (faculty) query.getSingleResult();
-		Query query2 = session.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify");
-		query2.setParameter("facid", fac_obj.getId());
-		query2.setParameter("verify", "Under Approval");
-		List students = query2.list();
-		session.close();
-		m.addAttribute("student_list", (Object) students);
-		return "/views/faculty/approvestudent.jsp";
-	}
-
-	@RequestMapping(value = "/faculty/allstudent", method = RequestMethod.GET)
-	public ModelAndView AllStudent(Model m, HttpServletRequest req, HttpServletResponse res,
-			@RequestParam(value = "sem", required = false) Integer sem) throws IOException {
-		String email = (String) req.getSession().getAttribute("email");
-		System.out.println("     ============    " + sem);
-		Session session = null;
-		session = HibernetConnection.getSessionFactory().openSession();
-		Query query = session.createQuery("FROM faculty WHERE email = :email");
-		query.setParameter("email", email);
-		faculty fac_obj = (faculty) query.getSingleResult();
-		List students;
-		List crs;
-		Query query1 = session
-				.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify");
-		Query query2 = session
-				.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify AND type = :type");
-		query1.setParameter("facid", fac_obj.getId());
-		query1.setParameter("verify", "Approve");
-		query2.setParameter("facid", fac_obj.getId());
-		query2.setParameter("verify", "Approve");
-		students = query1.list();
-		query2.setParameter("type", "CR");
-		crs = query2.list();
-		session.close();
-		ModelAndView mav = new ModelAndView("/views/faculty/allstudent.jsp");
-		mav.addObject("student_list", (Object) students);
-		mav.addObject("student_cr", (Object) crs);
-		return mav;
-	}
-	
-
 	@RequestMapping(value = "/faculty/logout")
 	public void LogoutFaculty(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		req.getSession().invalidate();
@@ -148,7 +100,56 @@ public class FacultyController {
 		}
 
 	}
+	
+	//----------------------------------------------Student-------------------------------------------------------------------
+	
+	@RequestMapping(value = "/faculty/approvalstudent", method = RequestMethod.GET)
+	public String Approvalpage(Model m, HttpServletRequest req, HttpServletResponse res) throws IOException {
+		String email = (String) req.getSession().getAttribute("email");
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		Query query = session.createQuery("FROM faculty WHERE email = :email");
+		query.setParameter("email", email);
+		faculty fac_obj = (faculty) query.getSingleResult();
+		Query query2 = session.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify");
+		query2.setParameter("facid", fac_obj.getId());
+		query2.setParameter("verify", "Under Approval");
+		List students = query2.list();
+		session.close();
+		m.addAttribute("student_list", (Object) students);
+		return "/views/faculty/approvestudent.jsp";
+	}
 
+	@RequestMapping(value = "/faculty/allstudent", method = RequestMethod.GET)
+	public ModelAndView AllStudent(Model m, HttpServletRequest req, HttpServletResponse res,
+			@RequestParam(value = "sem", required = false) Integer sem) throws IOException {
+		String email = (String) req.getSession().getAttribute("email");
+		System.out.println("     ============    " + sem);
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		Query query = session.createQuery("FROM faculty WHERE email = :email");
+		query.setParameter("email", email);
+		faculty fac_obj = (faculty) query.getSingleResult();
+		List students;
+		List crs;
+		Query query1 = session
+				.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify");
+		Query query2 = session
+				.createQuery("FROM student WHERE faculty_id = :facid AND verify = :verify AND type = :type");
+		query1.setParameter("facid", fac_obj.getId());
+		query1.setParameter("verify", "Approve");
+		query2.setParameter("facid", fac_obj.getId());
+		query2.setParameter("verify", "Approve");
+		students = query1.list();
+		query2.setParameter("type", "CR");
+		crs = query2.list();
+		session.close();
+		ModelAndView mav = new ModelAndView("/views/faculty/allstudent.jsp");
+		mav.addObject("student_list", (Object) students);
+		mav.addObject("student_cr", (Object) crs);
+		return mav;
+	}
+	
 	@RequestMapping(value = "/faculty/studentaccess")
 	public void Studentaccess(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
 			throws IOException, ServletException {

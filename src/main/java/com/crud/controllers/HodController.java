@@ -65,6 +65,8 @@ public class HodController {
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/login");
 	}
+	
+	//-------------------------------------------Faculty-----------------------------------------------------------------------------
 
 	@RequestMapping(value = "/hod/approvalfaculty", method = RequestMethod.GET)
 	public String Approvalfaculty(Model m, HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -105,6 +107,8 @@ public class HodController {
 		res.sendRedirect("approvalfaculty");
 	}
 
+	//------------------------------------------------------------------student--------------------------------------------------------------------------
+	
 	@RequestMapping(value = "/hod/allstudent", method = RequestMethod.GET)
 	public ModelAndView AllStudent(Model m, HttpServletRequest req, HttpServletResponse res,
 			@RequestParam(value = "sem", required = false) Integer sem) throws IOException {

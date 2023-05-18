@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.crud.dao.dep;
+import com.crud.dao.event;
 import com.crud.dao.faculty;
 import com.crud.dao.hod;
 import com.crud.dao.student;
@@ -60,6 +61,8 @@ public class AdminController {
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/login");
 	}
+	
+	//----------------------------------------------HOD-----------------------------------------------------------------
 
 	@RequestMapping(value = "/admin/addhod")
 	public String Addhod(Model m, HttpServletRequest req, HttpServletResponse res) {
@@ -73,17 +76,6 @@ public class AdminController {
 		m.addAttribute("hod_list", (Object) hods);
 		m.addAttribute("dep_list", (Object) deps);
 		return "/views/admin/addhod.jsp";
-	}
-
-	@RequestMapping(value = "/admin/adddep")
-	public String Adddep(Model m, HttpServletRequest req, HttpServletResponse res) {
-		Session session = null;
-		session = HibernetConnection.getSessionFactory().openSession();
-		Query query2 = session.createQuery("FROM dep");
-		List deps = query2.list();
-		session.close();
-		m.addAttribute("dep_list", (Object) deps);
-		return "/views/admin/adddep.jsp";
 	}
 
 	@RequestMapping(value = "/admin/addhodaction", method = RequestMethod.POST)
@@ -129,19 +121,6 @@ public class AdminController {
 		return "/views/admin/edithod.jsp";
 	}
 
-	@RequestMapping(value = "/admin/adddep/edit")
-	public String Adddepedit(Model m, HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
-			throws IOException {
-//		Session session = null;
-		Session session = HibernetConnection.getSessionFactory().openSession();
-		Query query2 = session.createQuery("FROM dep WHERE id = :id");
-		query2.setParameter("id", (Object) id);
-		dep dep_obj = (dep) query2.getSingleResult();
-		session.close();
-		m.addAttribute("dep", (Object) dep_obj);
-		return "/views/admin/editdep.jsp";
-	}
-
 	@RequestMapping(value = "/admin/edithodaction", method = RequestMethod.POST)
 	public void Edithodaction(HttpServletRequest req, HttpServletResponse res, @ModelAttribute("hod") hod hod)
 			throws IOException, SQLException {
@@ -153,7 +132,32 @@ public class AdminController {
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/admin/addhod");
 	}
-
+	
+	//------------------------------------------------Department-----------------------------------------------------------
+	
+	@RequestMapping(value = "/admin/adddep")
+	public String Adddep(Model m, HttpServletRequest req, HttpServletResponse res) {
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM dep");
+		List deps = query2.list();
+		session.close();
+		m.addAttribute("dep_list", (Object) deps);
+		return "/views/admin/adddep.jsp";
+	}
+	
+	@RequestMapping(value = "/admin/adddep/edit")
+	public String Adddepedit(Model m, HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM dep WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		dep dep_obj = (dep) query2.getSingleResult();
+		session.close();
+		m.addAttribute("dep", (Object) dep_obj);
+		return "/views/admin/editdep.jsp";
+	}
+	
 	@RequestMapping(value = "/admin/editdepaction", method = RequestMethod.POST)
 	public void Editdepaction(HttpServletRequest req, HttpServletResponse res, @ModelAttribute("dep") dep dep)
 			throws IOException, SQLException {
@@ -167,6 +171,7 @@ public class AdminController {
 		String contextPath = req.getContextPath();
 		res.sendRedirect(contextPath + "/admin/adddep");
 	}
+
 
 	@RequestMapping(value = "/admin/adddepaction", method = RequestMethod.POST)
 	public void Adddepaction(HttpServletRequest req, HttpServletResponse res, @ModelAttribute("dep") dep dep)
@@ -198,6 +203,9 @@ public class AdminController {
 		res.sendRedirect(contextPath + "/admin/adddep");
 	}
 
+	
+	//--------------------------------------------------Student------------------------------------------------------------------
+	
 	@RequestMapping(value = "/admin/student", method = RequestMethod.GET)
 	public ModelAndView AllStudent(Model m, HttpServletRequest req, HttpServletResponse res,
 			@RequestParam(value = "sem", required = false) Integer sem) throws IOException {
@@ -222,21 +230,7 @@ public class AdminController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/admin/faculty", method = RequestMethod.GET)
-	public ModelAndView AllFaculty(Model m, HttpServletRequest req, HttpServletResponse res) throws IOException {
-		Session session = null;
-		session = HibernetConnection.getSessionFactory().openSession();
-		Query query1 = session.createQuery("FROM faculty WHERE verify = :verify");
-		query1.setParameter("verify", "Approve");
-		List faculties = query1.list();
-		query1.setParameter("verify", "Under Approval");
-		List newfaculties = query1.list();
-		session.close();
-		ModelAndView mav = new ModelAndView("/views/admin/allfaculty.jsp");
-		mav.addObject("faculty_list", (Object) faculties);
-		mav.addObject("faculty_new", (Object) newfaculties);
-		return mav;
-	}
+
 
 	@RequestMapping(value = "/admin/studentcr")
 	public void Studentcr(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
@@ -256,7 +250,7 @@ public class AdminController {
 		session.close();
 		res.sendRedirect("student");
 	}
-
+	
 	@RequestMapping(value = "/admin/studentaccess")
 	public void Studentaccess(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
 			throws IOException, ServletException {
@@ -276,6 +270,27 @@ public class AdminController {
 		res.sendRedirect("student");
 	}
 	
+	
+	//---------------------------------------------Faculty------------------------------------------
+	
+	
+	@RequestMapping(value = "/admin/faculty", method = RequestMethod.GET)
+	public ModelAndView AllFaculty(Model m, HttpServletRequest req, HttpServletResponse res) throws IOException {
+		Session session = null;
+		session = HibernetConnection.getSessionFactory().openSession();
+		Query query1 = session.createQuery("FROM faculty WHERE verify = :verify");
+		query1.setParameter("verify", "Approve");
+		List faculties = query1.list();
+		query1.setParameter("verify", "Under Approval");
+		List newfaculties = query1.list();
+		session.close();
+		ModelAndView mav = new ModelAndView("/views/admin/allfaculty.jsp");
+		mav.addObject("faculty_list", (Object) faculties);
+		mav.addObject("faculty_new", (Object) newfaculties);
+		return mav;
+	}
+
+	
 	@RequestMapping(value = "/admin/facultyaccess")
 	public void Addhodedit(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
 			throws IOException, ServletException {
@@ -293,6 +308,91 @@ public class AdminController {
 		t.commit();
 		session.close();
 		res.sendRedirect("faculty");
+	}
+	
+	//------------------------------------------------------------Event--------------------------------------------------------------------------------
+	
+	@RequestMapping(value = "/admin/newevent")
+	public String AddEvent(Model m, HttpServletRequest req, HttpServletResponse res)
+			throws IOException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM dep");
+		List deps = query2.list();
+		Query query = session.createQuery("FROM event WHERE permission =:per");
+		query.setParameter("per","done");
+		List event = query.list();
+		Query query1 = session.createQuery("FROM event WHERE permission =:per");
+		query1.setParameter("per","Under Approval");
+		List events = query1.list();
+		session.close();
+		m.addAttribute("dep", deps);
+		m.addAttribute("events", event);
+		m.addAttribute("newevents", events);
+		return "/views/admin/newevent.jsp";
+	}
+	
+	@RequestMapping(value = "/admin/addevent", method = RequestMethod.POST)
+	public void Addeventaction(HttpServletRequest req, HttpServletResponse res, 
+			@RequestParam("name") String name,
+			@RequestParam("type") String type,
+			@RequestParam("info") String info,
+			@RequestParam("contact") String contact)
+			throws IOException, ServletException {
+		String email = (String) req.getSession().getAttribute("email");
+		String mtype = (String) req.getSession().getAttribute("type");
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		event event=new event();
+		event.setContact(contact);
+		event.setEmail(email);
+		event.setInfo(info);
+		event.setMtype(mtype);
+		event.setName(name);
+		event.setPermission("done");
+		event.setStatus("On");
+		event.setType(type);
+		Transaction t = session.beginTransaction();
+		t.commit();
+		session.save(event);
+		session.close();
+		res.sendRedirect("newevent");
+	}
+	
+	@RequestMapping(value = "/admin/eventstatus")
+	public void Eventstatus(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM event WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		event eve_obj = (event) query2.getSingleResult();
+		if (eve_obj.getStatus().equals("On")) {
+			eve_obj.setStatus("Off");
+		} else {
+			eve_obj.setStatus("On");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) eve_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("newevent");
+	}
+	
+	@RequestMapping(value = "/admin/eventaccess")
+	public void Eventeccess(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM event WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		event eve_obj = (event) query2.getSingleResult();
+		if (eve_obj.getPermission().equals("done")) {
+			eve_obj.setPermission("Under Approval");
+		} else {
+			eve_obj.setPermission("done");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) eve_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("newevent");
 	}
 
 	// ------------------------------------------------------AJAX--------------------------------------------------------------------------------
