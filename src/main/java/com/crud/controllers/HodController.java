@@ -185,6 +185,97 @@ public class HodController {
 		return "/views/hod/approvalstudent.jsp";
 	}
 	
+	//----------------------------------------------------------------EVENT-------------------------------------------------------------------------------
+	
+	@RequestMapping(value = "/hod/newevent", method = RequestMethod.GET)
+	public String Newevent(Model m, HttpServletRequest req, HttpServletResponse res) throws IOException {
+		String email = (String) req.getSession().getAttribute("email");
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query quer = session.createQuery("FROM hod WHERE email = :email");
+		quer.setParameter("email", email);
+		hod hod_obj = (hod) quer.getSingleResult();
+		Query query = session.createQuery("FROM event WHERE permission =:per AND type = :type");
+		query.setParameter("per","done");
+		query.setParameter("type",hod_obj.getDep());
+		List event = query.list();
+		query.setParameter("type","All");
+		List eventss = query.list();
+		Query query1 = session.createQuery("FROM event WHERE permission =:per AND type =:type");
+		query1.setParameter("per","Under Approval");
+		query1.setParameter("type",hod_obj.getDep());
+		List events = query1.list();
+		session.close();
+		m.addAttribute("events", event);
+		m.addAttribute("eventsss", eventss);
+		m.addAttribute("newevents", events);
+		return "/views/hod/newevent.jsp";
+	}
+	
+	@RequestMapping(value = "/hod/addevent", method = RequestMethod.POST)
+	public void Addeventaction(HttpServletRequest req, HttpServletResponse res, 
+			@RequestParam("name") String name,
+			@RequestParam("info") String info,
+			@RequestParam("contact") String contact)
+			throws IOException, ServletException {
+		String email = (String) req.getSession().getAttribute("email");
+		String mtype = (String) req.getSession().getAttribute("type");
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query quer = session.createQuery("FROM hod WHERE email = :email");
+		quer.setParameter("email", email);
+		hod hod_obj = (hod) quer.getSingleResult();
+		event event=new event();
+		event.setContact(contact);
+		event.setEmail(email);
+		event.setInfo(info);
+		event.setMtype(mtype);
+		event.setName(name);
+		event.setPermission("done");
+		event.setStatus("On");
+		event.setType(hod_obj.getDep());
+		Transaction t = session.beginTransaction();
+		t.commit();
+		session.save(event);
+		session.close();
+		res.sendRedirect("newevent");
+	}
+	
+	@RequestMapping(value = "/hod/eventstatus")
+	public void Eventstatus(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM event WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		event eve_obj = (event) query2.getSingleResult();
+		if (eve_obj.getStatus().equals("On")) {
+			eve_obj.setStatus("Off");
+		} else {
+			eve_obj.setStatus("On");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) eve_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("newevent");
+	}
+	
+	@RequestMapping(value = "/hod/eventaccess")
+	public void Eventeccess(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM event WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		event eve_obj = (event) query2.getSingleResult();
+		if (eve_obj.getPermission().equals("done")) {
+			eve_obj.setPermission("Under Approval");
+		} else {
+			eve_obj.setPermission("done");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) eve_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("newevent");
+	}
 	
 	//------------------------------------------------------AJAX--------------------------------------------------------------------------------
 	

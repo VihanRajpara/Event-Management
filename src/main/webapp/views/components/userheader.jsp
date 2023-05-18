@@ -143,6 +143,9 @@ if (session_email == null) {
 			<li><a href='${pageContext.request.contextPath}/hod/allstudent'
 				<% if (urlPath.equals("/views/hod/allstudent.jsp")) { %>
 				class="active" <% } %>> Student</a></li>
+			<li><a href='${pageContext.request.contextPath}/hod/newevent'
+				<% if (urlPath.equals("/views/hod/newevent.jsp")) { %>
+				class="active" <% } %>>Event</a></li>
 		</ul>
 
 	</nav>
@@ -166,6 +169,10 @@ if (session_email == null) {
 				href='${pageContext.request.contextPath}/faculty/allstudent'
 				<% if (urlPath.equals("/views/faculty/allstudent.jsp")) { %>
 				class="active" <% } %>>All Student</a></li>
+			<li><a
+				href='${pageContext.request.contextPath}/faculty/newevent'
+				<% if (urlPath.equals("/views/faculty/newevent.jsp")) { %>
+				class="active" <% } %>>Event</a></li>
 		</ul>
 
 	</nav>
