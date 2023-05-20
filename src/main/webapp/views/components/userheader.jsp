@@ -189,6 +189,10 @@ if (session_email == null) {
 				href='${pageContext.request.contextPath}/student/dashboard'
 				<% if (urlPath.equals("/views/student/dashboard.jsp")) { %>
 				class="active" <% } %>>HOME</a></li>
+			<li><a
+				href='${pageContext.request.contextPath}/student/newevent'
+				<% if (urlPath.equals("/views/student/newevent.jsp")) { %>
+				class="active" <% } %>>New Event</a></li>
 		</ul>
 
 	</nav>

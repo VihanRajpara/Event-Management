@@ -35,7 +35,6 @@ String session_type = (String) session.getAttribute("type");
 
 /* ---------- GENERAL ---------- */
 body {
-
 	color: #5a5656;
 	font-family: 'Open Sans', sans-serif;
 	line-height: 1.5;
@@ -70,8 +69,8 @@ strong {
 	width: 300px;
 }
 
-form fieldset input[type="text"], input[type="password"], input[type="email"],select
-	{
+form fieldset input[type="text"], input[type="password"], input[type="email"],
+	select {
 	appearance: none;
 	background: #e5e5e5;
 	border: none;
@@ -112,30 +111,37 @@ form fieldset input[type="submit"]:hover {
 	%><jsp:include page="../components/userheader.jsp" />
 	<br>
 	<div id="login">
-	<form action="addevent" method="post">
+		<form action="addevent" method="post">
 			<h1>
 				<strong>Welcome .</strong> Add EVENT.
 			</h1>
 			<fieldset>
-			<p>
+				<p>
 					<input type="text" name="name" id="name" placeholder="Event Name">
 				</p>
 				<p>
 					<input type="text" name="info" id="info" placeholder="Event Info">
 				</p>
 				<p>
-					<input type="text" name="contact" id="contact" placeholder="Contact">
+					<input type="text" name="contact" id="contact"
+						placeholder="Contact">
 				</p>
 				<p>
-					<input type="submit" onclick="javascript: return confirm('Are you sure you want to Add this User?');" value="Add">
+					<input type="text" name="fee" id="fee"
+						placeholder="Fee">
+				</p>
+				<p>
+					<input type="submit"
+						onclick="javascript: return confirm('Are you sure you want to Add this User?');"
+						value="Add">
 				</p>
 			</fieldset>
 		</form>
-		</div>
-		
-		
-		
-		<br>
+	</div>
+
+
+
+	<br>
 	<br>
 	<center>
 		<h3>
@@ -150,6 +156,7 @@ form fieldset input[type="submit"]:hover {
 				<th>Id</th>
 				<th>Name</th>
 				<th>Info</th>
+				<th>Fee</th>
 				<th>Dep</th>
 				<th>Contact</th>
 				<th>Host</th>
@@ -163,20 +170,24 @@ form fieldset input[type="submit"]:hover {
 					<td>${event.id}</td>
 					<td>${event.name}</td>
 					<td>${event.info}</td>
+					<td>${event.fee}</td>
 					<td>${event.type}</td>
 					<td>${event.contact}</td>
-					<td>${event.email} | ${event.mtype}</td>
+					<td>${event.email}| ${event.mtype}</td>
 					<td>${event.permission}</td>
 					<td><a style="text-transform: capitalize;"
 						href="${pageContext.request.contextPath}/hod/eventaccess?id=${event.id}"
 						onclick="javascript: return confirm('Are you sure you want to Remove Access to this Student?');">Give
-							Access</a></td>
+							Access</a>| <a style="text-transform: capitalize;"
+						href="${pageContext.request.contextPath}/hod/eventdelete?id=${event.id}"
+						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
+							Delete</a></td>
 				</tr>
 			</jstlc:forEach>
 		</table>
 	</div>
-		
-		
+
+
 	<br>
 	<br>
 	<center>
@@ -192,6 +203,7 @@ form fieldset input[type="submit"]:hover {
 				<th>Id</th>
 				<th>Name</th>
 				<th>Info</th>
+				<th>Fee</th>
 				<th>Dep</th>
 				<th>Contact</th>
 				<th>Host</th>
@@ -206,9 +218,10 @@ form fieldset input[type="submit"]:hover {
 					<td>${event.id}</td>
 					<td>${event.name}</td>
 					<td>${event.info}</td>
+					<td>${event.fee}</td>
 					<td>${event.type}</td>
 					<td>${event.contact}</td>
-					<td>${event.email} | ${event.mtype}</td>
+					<td>${event.email}| ${event.mtype}</td>
 					<td>${event.status}</td>
 					<td>${event.permission}</td>
 					<td><a style="text-transform: capitalize;"
@@ -217,7 +230,10 @@ form fieldset input[type="submit"]:hover {
 							Access</a> | <a style="text-transform: capitalize;"
 						href="${pageContext.request.contextPath}/hod/eventstatus?id=${event.id}"
 						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
-							On & Off</a></td>
+							On & Off</a>| <a style="text-transform: capitalize;"
+						href="${pageContext.request.contextPath}/hod/eventdelete?id=${event.id}"
+						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
+							Delete</a></td>
 				</tr>
 			</jstlc:forEach>
 			<jstlc:forEach var="event" items="${eventsss}">
@@ -226,15 +242,19 @@ form fieldset input[type="submit"]:hover {
 					<td>${event.id}</td>
 					<td>${event.name}</td>
 					<td>${event.info}</td>
+					<td>${event.fee}</td>
 					<td>${event.type}</td>
 					<td>${event.contact}</td>
-					<td>${event.email} | ${event.mtype}</td>
+					<td>${event.email}| ${event.mtype}</td>
 					<td>${event.status}</td>
 					<td>${event.permission}</td>
 					<td><a style="text-transform: capitalize;"
 						href="${pageContext.request.contextPath}/hod/eventstatus?id=${event.id}"
 						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
-							On & Off</a></td>
+							On & Off</a>| <a style="text-transform: capitalize;"
+						href="${pageContext.request.contextPath}/hod/eventdelete?id=${event.id}"
+						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
+							Delete</a></td>
 				</tr>
 			</jstlc:forEach>
 		</table>

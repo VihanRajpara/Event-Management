@@ -7,6 +7,7 @@
 	String session_email = (String) session.getAttribute("email");
 	String session_type = (String) session.getAttribute("type");
 	String session_verify = (String) session.getAttribute("verify");
+	String session_rtype = (String) session.getAttribute("rtype");
 %>
 <meta charset="ISO-8859-1">
 <title><%=session_type %> Panel</title>
@@ -42,7 +43,7 @@ body {
 	if (session_verify.equals("Under Approval")) {
 	%><section class="section">
 		<a class="buttons"
-			href='${pageContext.request.contextPath}/faculty/logout'>LOGOUT</a>
+			href='${pageContext.request.contextPath}/student/logout'>LOGOUT</a>
 	</section>
 	<br>
 	<br>

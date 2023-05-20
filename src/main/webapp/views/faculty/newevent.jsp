@@ -144,6 +144,9 @@ form fieldset input[type="submit"]:hover {
 				</p>
 				<p>
 					<input type="text" name="contact" id="contact" placeholder="Contact">
+				</p><p>
+					<input type="text" name="fee" id="fee"
+						placeholder="Fee">
 				</p>
 				<p>
 					<input type="submit" onclick="javascript: return confirm('Are you sure you want to Add this User?');" value="Add">
@@ -166,6 +169,7 @@ form fieldset input[type="submit"]:hover {
 				<th>Id</th>
 				<th>Name</th>
 				<th>Info</th>
+				<th>Fee</th>
 				<th>Dep</th>
 				<th>Contact</th>
 				<th>Host</th>
@@ -178,6 +182,7 @@ form fieldset input[type="submit"]:hover {
 					<td>${event.id}</td>
 					<td>${event.name}</td>
 					<td>${event.info}</td>
+					<td>${event.fee}</td>
 					<td>${event.type}</td>
 					<td>${event.contact}</td>
 					<td>${event.email} | ${event.mtype}</td>
@@ -202,12 +207,14 @@ form fieldset input[type="submit"]:hover {
 				<th>Id</th>
 				<th>Name</th>
 				<th>Info</th>
+				<th>Fee</th>
 				<th>Dep</th>
 				<th>Contact</th>
 				<th>Host</th>
 				<th>Status</th>
 				<th>Permission</th>
 				<th>Action</th>
+				<th>Detail</th>
 			</thead>
 
 			<jstlc:forEach var="event" items="${events}">
@@ -216,18 +223,20 @@ form fieldset input[type="submit"]:hover {
 					<td>${event.id}</td>
 					<td>${event.name}</td>
 					<td>${event.info}</td>
+					<td>${event.fee}</td>
 					<td>${event.type}</td>
 					<td>${event.contact}</td>
 					<td>${event.email} | ${event.mtype}</td>
 					<td>${event.status}</td>
 					<td>${event.permission}</td>
 					<td><a style="text-transform: capitalize;"
-						href="${pageContext.request.contextPath}/hod/eventaccess?id=${event.id}"
-						onclick="javascript: return confirm('Are you sure you want to Remove Access to this Student?');">Remove
-							Access</a> | <a style="text-transform: capitalize;"
-						href="${pageContext.request.contextPath}/hod/eventstatus?id=${event.id}"
+						href="${pageContext.request.contextPath}/faculty/eventstatus?id=${event.id}"
 						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
 							On & Off</a></td>
+							<td><a style="text-transform: capitalize;"
+						href="${pageContext.request.contextPath}/faculty/eventview?id=${event.id}"
+						onclick="javascript: return confirm('Are you sure you want to View Registration Detail?');">
+							View</a></td>
 				</tr>
 			</jstlc:forEach>
 			<jstlc:forEach var="event" items="${eventsss}">
@@ -236,15 +245,20 @@ form fieldset input[type="submit"]:hover {
 					<td>${event.id}</td>
 					<td>${event.name}</td>
 					<td>${event.info}</td>
+					<td>${event.fee}</td>
 					<td>${event.type}</td>
 					<td>${event.contact}</td>
 					<td>${event.email} | ${event.mtype}</td>
 					<td>${event.status}</td>
 					<td>${event.permission}</td>
 					<td><a style="text-transform: capitalize;"
-						href="${pageContext.request.contextPath}/hod/eventstatus?id=${event.id}"
+						href="${pageContext.request.contextPath}/faculty/eventstatus?id=${event.id}"
 						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
 							On & Off</a></td>
+							<td><a style="text-transform: capitalize;"
+						href="${pageContext.request.contextPath}/faculty/eventview?id=${event.id}"
+						onclick="javascript: return confirm('Are you sure you want to View Registration Detail?');">
+							View</a></td>
 				</tr>
 			</jstlc:forEach>
 		</table>

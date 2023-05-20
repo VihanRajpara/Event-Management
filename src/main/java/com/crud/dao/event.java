@@ -16,7 +16,14 @@ public class event {
 	private String mtype;
 	private String permission;
 	private String status;
+	private String fee;
 	
+	public String getFee() {
+		return fee;
+	}
+	public void setFee(String fee) {
+		this.fee = fee;
+	}
 	public String getStatus() {
 		return status;
 	}

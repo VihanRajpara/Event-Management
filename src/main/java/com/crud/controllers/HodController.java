@@ -215,7 +215,8 @@ public class HodController {
 	public void Addeventaction(HttpServletRequest req, HttpServletResponse res, 
 			@RequestParam("name") String name,
 			@RequestParam("info") String info,
-			@RequestParam("contact") String contact)
+			@RequestParam("contact") String contact,
+			@RequestParam("fee") String fee)
 			throws IOException, ServletException {
 		String email = (String) req.getSession().getAttribute("email");
 		String mtype = (String) req.getSession().getAttribute("type");
@@ -232,6 +233,7 @@ public class HodController {
 		event.setPermission("done");
 		event.setStatus("On");
 		event.setType(hod_obj.getDep());
+		event.setFee(fee);
 		Transaction t = session.beginTransaction();
 		t.commit();
 		session.save(event);
@@ -272,6 +274,19 @@ public class HodController {
 		}
 		Transaction t = session.beginTransaction();
 		session.saveOrUpdate((Object) eve_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("newevent");
+	}
+	
+	@RequestMapping(value = "/hod/eventdelete" )
+	public void Eventdelete(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		event event=new event();
+		event.setId(id);
+		Transaction t = session.beginTransaction();
+		session.delete((Object) event);
 		t.commit();
 		session.close();
 		res.sendRedirect("newevent");

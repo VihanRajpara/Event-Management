@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.crud.dao.event;
+import com.crud.dao.register;
 import com.crud.dao.faculty;
 import com.crud.dao.student;
 import com.crud.dao.hod;
@@ -220,7 +221,8 @@ public class FacultyController {
 	public void Addeventaction(HttpServletRequest req, HttpServletResponse res, 
 			@RequestParam("name") String name,
 			@RequestParam("info") String info,
-			@RequestParam("contact") String contact)
+			@RequestParam("contact") String contact,
+			@RequestParam("fee") String fee)
 			throws IOException, ServletException {
 		String email = (String) req.getSession().getAttribute("email");
 		String mtype = (String) req.getSession().getAttribute("type");
@@ -234,9 +236,10 @@ public class FacultyController {
 		event.setInfo(info);
 		event.setMtype(mtype);
 		event.setName(name);
-		event.setPermission("done");
+		event.setPermission("Under Approval");
 		event.setStatus("On");
 		event.setType(hod_obj.getDep());
+		event.setFee(fee);
 		Transaction t = session.beginTransaction();
 		t.commit();
 		session.save(event);
@@ -261,6 +264,37 @@ public class FacultyController {
 		t.commit();
 		session.close();
 		res.sendRedirect("newevent");
+	}
+	
+	@RequestMapping(value = "/faculty/eventview")
+	public String Eventview(Model m,HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM register WHERE event_id = :id");
+		query2.setParameter("id",id);
+		List events = query2.list();
+		m.addAttribute("events", events);
+		m.addAttribute("eid",id);
+		return "/views/faculty/viewregister.jsp";
+	}
+	
+	@RequestMapping(value = "/faculty/eventfeestatus")
+	public void Eventfeestatus(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id,@RequestParam("eid") int eid)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM register WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		register reg_obj = (register) query2.getSingleResult();
+		if(reg_obj.getFee().equals("Unpaid")) {
+			reg_obj.setFee("Paid");
+		}else {
+			reg_obj.setFee("Unpaid");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) reg_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("eventview?id="+eid);
 	}
 	
 	//------------------------------------------------------AJAX---------------------------------------------------------------------------------------------

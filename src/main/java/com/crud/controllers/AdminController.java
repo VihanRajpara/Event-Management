@@ -133,6 +133,7 @@ public class AdminController {
 		res.sendRedirect(contextPath + "/admin/addhod");
 	}
 	
+	
 	//------------------------------------------------Department-----------------------------------------------------------
 	
 	@RequestMapping(value = "/admin/adddep")
@@ -336,7 +337,8 @@ public class AdminController {
 			@RequestParam("name") String name,
 			@RequestParam("type") String type,
 			@RequestParam("info") String info,
-			@RequestParam("contact") String contact)
+			@RequestParam("contact") String contact,
+			@RequestParam("fee") String fee)
 			throws IOException, ServletException {
 		String email = (String) req.getSession().getAttribute("email");
 		String mtype = (String) req.getSession().getAttribute("type");
@@ -350,6 +352,7 @@ public class AdminController {
 		event.setPermission("done");
 		event.setStatus("On");
 		event.setType(type);
+		event.setFee(fee);
 		Transaction t = session.beginTransaction();
 		t.commit();
 		session.save(event);
@@ -371,6 +374,19 @@ public class AdminController {
 		}
 		Transaction t = session.beginTransaction();
 		session.saveOrUpdate((Object) eve_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("newevent");
+	}
+	
+	@RequestMapping(value = "/admin/eventdelete" )
+	public void Eventdelete(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		event event=new event();
+		event.setId(id);
+		Transaction t = session.beginTransaction();
+		session.delete((Object) event);
 		t.commit();
 		session.close();
 		res.sendRedirect("newevent");

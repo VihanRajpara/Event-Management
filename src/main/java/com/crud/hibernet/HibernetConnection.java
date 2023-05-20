@@ -5,6 +5,7 @@ import java.util.Map;
 import com.crud.dao.hod;
 import com.crud.dao.faculty;
 import com.crud.dao.dep;
+import com.crud.dao.register;
 import com.crud.dao.event;
 import com.crud.dao.student;
 import org.hibernate.service.ServiceRegistry;
@@ -37,6 +38,7 @@ public class HibernetConnection {
                 sources.addAnnotatedClass((Class)dep.class);
                 sources.addAnnotatedClass(student.class);
                 sources.addAnnotatedClass((Class)event.class);
+                sources.addAnnotatedClass((Class)register.class);
                 
                Metadata metadata = sources.getMetadataBuilder().build();
                 HibernetConnection.sessionFactory = metadata.getSessionFactoryBuilder().build();
