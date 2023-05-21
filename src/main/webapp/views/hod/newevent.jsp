@@ -210,6 +210,7 @@ form fieldset input[type="submit"]:hover {
 				<th>Status</th>
 				<th>Permission</th>
 				<th>Action</th>
+				<th>Detail</th>
 			</thead>
 
 			<jstlc:forEach var="event" items="${events}">
@@ -234,6 +235,10 @@ form fieldset input[type="submit"]:hover {
 						href="${pageContext.request.contextPath}/hod/eventdelete?id=${event.id}"
 						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
 							Delete</a></td>
+							<td><a style="text-transform: capitalize;"
+						href="${pageContext.request.contextPath}/hod/eventview?id=${event.id}"
+						onclick="javascript: return confirm('Are you sure you want to View Registration Detail?');">
+							View</a></td>
 				</tr>
 			</jstlc:forEach>
 			<jstlc:forEach var="event" items="${eventsss}">
@@ -255,6 +260,10 @@ form fieldset input[type="submit"]:hover {
 						href="${pageContext.request.contextPath}/hod/eventdelete?id=${event.id}"
 						onclick="javascript: return confirm('Are you sure you want to Make CR to this Student?');">
 							Delete</a></td>
+							<td><a style="text-transform: capitalize;"
+						href="${pageContext.request.contextPath}/hod/eventview?id=${event.id}"
+						onclick="javascript: return confirm('Are you sure you want to View Registration Detail?');">
+							View</a></td>
 				</tr>
 			</jstlc:forEach>
 		</table>

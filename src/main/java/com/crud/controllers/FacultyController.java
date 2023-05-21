@@ -2,6 +2,7 @@ package com.crud.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
+import com.crud.function.*;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.sql.Connection;
@@ -28,6 +29,7 @@ import com.crud.dao.faculty;
 import com.crud.dao.student;
 import com.crud.dao.hod;
 import com.crud.databse.DBConnection;
+import com.crud.function.EmailSender;
 import com.crud.hibernet.HibernetConnection;
 
 import jakarta.servlet.ServletException;
@@ -287,6 +289,12 @@ public class FacultyController {
 		register reg_obj = (register) query2.getSingleResult();
 		if(reg_obj.getFee().equals("Unpaid")) {
 			reg_obj.setFee("Paid");
+			byte[] qrCodeImageBytes=reg_obj.getQr();
+			String recipientEmail = reg_obj.getStudent().getEmail();
+			String subject = "Payment Confirmation";
+			String body = "Dear " + reg_obj.getStudent().getName() + ",\n\nYour payment has been confirmed. "
+					+ "Please find attached the QR Code for your registration.\n\nThank you.";
+			EmailSender.sendEmailWithAttachment(recipientEmail, subject, body, qrCodeImageBytes);
 		}else {
 			reg_obj.setFee("Unpaid");
 		}

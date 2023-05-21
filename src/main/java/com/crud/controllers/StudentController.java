@@ -17,6 +17,7 @@ import com.crud.dao.faculty;
 import com.crud.dao.hod;
 import com.crud.dao.event;
 import com.crud.dao.student;
+import com.crud.function.QRCodeGenerator;
 import com.crud.dao.register;
 import com.crud.hibernet.HibernetConnection;
 
@@ -143,6 +144,18 @@ public class StudentController {
 			register.setEvent(eve_obj);
 			register.setStudent(stu_obj);
 			register.setFee("Unpaid");
+			String qrCodeContent = "Name: " + register.getStudent().getName() + "\nEmail: "
+					+ register.getStudent().getEmail() + "\nID: " + register.getStudent().getId() + "\nSemester: "
+					+ register.getStudent().getSem() + "\nFaculty Name: " + register.getStudent().getFaculty().getName()
+					+ "\nHOD Name: " + register.getStudent().getHod().getName();
+
+			int qrCodeWidth = 300;
+			int qrCodeHeight = 300;
+			
+			//Genrate QR CODE
+			byte[] qrCodeImageBytes = QRCodeGenerator.generateQRCode(qrCodeContent, qrCodeWidth, qrCodeHeight);
+			
+			register.setQr(qrCodeImageBytes);
 			Transaction t = session.beginTransaction();
 			session.save(register);
 			t.commit();

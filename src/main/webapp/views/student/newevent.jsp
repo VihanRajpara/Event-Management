@@ -133,6 +133,7 @@ body {
 			</jstlc:forEach>
 		</table>
 	</div>
+
 	<br><br><center>
 		<h3>
 			<strong>Your Register Event</strong>
@@ -156,7 +157,6 @@ body {
 			</thead>
 
 			<jstlc:forEach var="e" items="${registerevent}">
-
 				<tr>
 					<td>${e.id}</td>
 					<td>${e.event.name}</td>
@@ -166,7 +166,7 @@ body {
 					<td>${e.event.type}</td>
 					<td>${e.event.contact}</td>
 					<td>${e.student.contact}</td>
-					<td>${e.event.status}</td>
+					<td>${e.event.status}</td>	
 					<td><a style="text-transform: capitalize;"
 						href="${pageContext.request.contextPath}/student/removeregister?id=${e.id}"
 						onclick="javascript: return confirm('Are you sure you want to remove this Registration?');">

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.List;
 
+import com.crud.function.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -290,6 +291,43 @@ public class HodController {
 		t.commit();
 		session.close();
 		res.sendRedirect("newevent");
+	}
+	
+	@RequestMapping(value = "/hod/eventview")
+	public String Eventview(Model m,HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM register WHERE event_id = :id");
+		query2.setParameter("id",id);
+		List events = query2.list();
+		m.addAttribute("events", events);
+		m.addAttribute("eid",id);
+		return "/views/hod/viewregister.jsp";
+	}
+	
+	@RequestMapping(value = "/hod/eventfeestatus")
+	public void Eventfeestatus(HttpServletRequest req, HttpServletResponse res, @RequestParam("id") int id,@RequestParam("eid") int eid)
+			throws IOException, ServletException {
+		Session session = HibernetConnection.getSessionFactory().openSession();
+		Query query2 = session.createQuery("FROM register WHERE id = :id");
+		query2.setParameter("id", (Object) id);
+		register reg_obj = (register) query2.getSingleResult();
+		if(reg_obj.getFee().equals("Unpaid")) {
+			reg_obj.setFee("Paid");
+			byte[] qrCodeImageBytes=reg_obj.getQr();
+			String recipientEmail = reg_obj.getStudent().getEmail();
+			String subject = "Payment Confirmation";
+			String body = "Dear " + reg_obj.getStudent().getName() + ",\n\nYour payment has been confirmed. "
+					+ "Please find attached the QR Code for your registration.\n\nThank you.";
+			EmailSender.sendEmailWithAttachment(recipientEmail, subject, body, qrCodeImageBytes);
+		}else {
+			reg_obj.setFee("Unpaid");
+		}
+		Transaction t = session.beginTransaction();
+		session.saveOrUpdate((Object) reg_obj);
+		t.commit();
+		session.close();
+		res.sendRedirect("eventview?id="+eid);
 	}
 	
 	//------------------------------------------------------AJAX--------------------------------------------------------------------------------

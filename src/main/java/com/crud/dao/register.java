@@ -19,6 +19,16 @@ public class register {
 
 	private String fee;
 	
+	private byte[] qr;
+	
+	public byte[] getQr() {
+		return qr;
+	}
+
+	public void setQr(byte[] qr) {
+		this.qr = qr;
+	}
+
 	public String getFee() {
 		return fee;
 	}
